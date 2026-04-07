@@ -31329,29 +31329,20 @@ const renderCharts = (dataSummary) => {
   const commonOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      legend: { labels: { color: "#111827" } }
-    },
+    plugins: { legend: { labels: { color: "#111827" } } },
     scales: {
       x: {
         ticks: {
           color: "#6b7280",
           maxRotation: 45,
-          // Batasi kemiringan biar gak makan tempat
-          callback: function(value) {
-            const label = this.getLabelForValue(value);
-            if (typeof label === "string" && label.length > 15) {
-              return label.substring(0, 15) + "...";
-            }
-            return label;
+          callback: function(val) {
+            const lbl = this.getLabelForValue(val);
+            return typeof lbl === "string" && lbl.length > 15 ? lbl.substring(0, 15) + "..." : lbl;
           }
         },
         grid: { color: "#e5e7eb" }
       },
-      y: {
-        ticks: { color: "#6b7280" },
-        grid: { color: "#e5e7eb" }
-      }
+      y: { ticks: { color: "#6b7280" }, grid: { color: "#e5e7eb" } }
     }
   };
   const ctxLine = document.getElementById("progressive-line-chart").getContext("2d");
@@ -31362,32 +31353,11 @@ const renderCharts = (dataSummary) => {
     data: {
       labels: dataSummary.dates,
       datasets: [
-        {
-          label: "Target Kumulatif",
-          data: dataSummary.targetCounts,
-          borderColor: "rgba(255, 99, 132, 1)",
-          // Merah
-          borderWidth: 1.5,
-          radius: 0,
-          fill: false,
-          tension: 0.1
-        },
-        {
-          label: "Produksi Aktual",
-          data: dataSummary.cumulativeCounts,
-          borderColor: "rgba(54, 162, 235, 1)",
-          // Biru
-          borderWidth: 1.5,
-          radius: 0,
-          fill: false,
-          tension: 0.1
-        }
+        { label: "Target Kumulatif", data: dataSummary.targetCounts, borderColor: "rgba(255, 99, 132, 1)", borderWidth: 1.5, radius: 0, fill: false, tension: 0.1 },
+        { label: "Produksi Aktual", data: dataSummary.cumulativeCounts, borderColor: "rgba(54, 162, 235, 1)", borderWidth: 1.5, radius: 0, fill: false, tension: 0.1 }
       ]
     },
-    options: {
-      ...commonOptions,
-      animation: { x: { type: "number", easing: "linear", duration: 1e3 }, y: { type: "number", easing: "linear", duration: 1e3 } }
-    }
+    options: { ...commonOptions, animation: { x: { type: "number", easing: "linear", duration: 1e3 }, y: { type: "number", easing: "linear", duration: 1e3 } } }
   });
   const ctxDoughnut = document.getElementById("failure-doughnut-chart").getContext("2d");
   if (doughnutChart)
@@ -31395,15 +31365,17 @@ const renderCharts = (dataSummary) => {
   doughnutChart = new Chart(ctxDoughnut, {
     type: "doughnut",
     data: {
-      labels: ["Aktif", "Gagal: Chip", "Gagal: Driver", "Gagal: Solder"],
+      labels: ["Produksi", "Aktif", "Gagal: Chip", "Gagal: Driver", "Gagal: Solder"],
       datasets: [{
         data: [
+          dataSummary.statusCount.produksi,
           dataSummary.statusCount.active,
           dataSummary.statusCount.dead_chip,
           dataSummary.statusCount.dead_driver,
           dataSummary.statusCount.dead_solder
         ],
-        backgroundColor: ["#10b981", "#ef4444", "#f59e0b", "#6366f1"]
+        // Warna: Indigo (Produksi), Hijau (Aktif), Merah, Orange, Ungu (Gagal)
+        backgroundColor: ["#6366f1", "#10b981", "#ef4444", "#f59e0b", "#8b5cf6"]
       }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "right" } } }
@@ -31415,12 +31387,7 @@ const renderCharts = (dataSummary) => {
     type: "bar",
     data: {
       labels: Object.keys(dataSummary.batchAgeData),
-      datasets: [{
-        label: "Rata-rata Umur (Hari)",
-        data: Object.values(dataSummary.batchAgeData),
-        backgroundColor: "#3b82f6",
-        borderRadius: 4
-      }]
+      datasets: [{ label: "Rata-rata Umur (Hari)", data: Object.values(dataSummary.batchAgeData), backgroundColor: "#3b82f6", borderRadius: 4 }]
     },
     options: commonOptions
   });
@@ -31486,11 +31453,19 @@ btnExportCSV.addEventListener("click", () => {
   if (globalDocsData.length === 0)
     return showToast("Data kosong!", true);
   let csvContent = "Kode ARB,Batch,Tanggal Produksi,Status,Umur (Hari)\n";
+  const statusMap = {
+    "produksi": "Tahap Produksi",
+    "active": "Aktif Normal",
+    "dead_chip": "Gagal: Chip LED",
+    "dead_driver": "Gagal: Driver",
+    "dead_solder": "Gagal: Solder"
+  };
   globalDocsData.forEach((data, index2) => {
     const urutan = globalDocsData.length - index2;
     const code = `ARB-${String(urutan).padStart(3, "0")}${data.randomSuffix || "XX"}`;
     const age = data.failedDate ? calculateDays(data.productionDate, data.failedDate) : calculateDays(data.productionDate);
-    csvContent += `${code},${data.batch},${data.productionDate},${data.status},${age}
+    const stText = statusMap[data.status] || data.status;
+    csvContent += `${code},${data.batch},${data.productionDate},${stText},${age}
 `;
   });
   const blob = new Blob([csvContent], { type: "text/csv" });
@@ -31503,7 +31478,7 @@ btnExportCSV.addEventListener("click", () => {
 });
 const renderUI = () => {
   let totalDays = 0, count = 0, failCount = 0;
-  const summary = { dates: [], cumulativeCounts: [], targetCounts: [], statusCount: { active: 0, dead_chip: 0, dead_driver: 0, dead_solder: 0 }, batchAgeData: {} };
+  const summary = { dates: [], cumulativeCounts: [], targetCounts: [], statusCount: { produksi: 0, active: 0, dead_chip: 0, dead_driver: 0, dead_solder: 0 }, batchAgeData: {} };
   bulbListContainer.innerHTML = "";
   const term = searchInput.value.toLowerCase();
   const filter = filterStatus.value;
@@ -31522,16 +31497,33 @@ const renderUI = () => {
     const age = data.failedDate ? calculateDays(data.productionDate, data.failedDate) : calculateDays(data.productionDate);
     totalDays += age;
     count++;
-    if (data.status !== "active")
+    const isDead = data.status.startsWith("dead");
+    if (isDead)
       failCount++;
-    summary.statusCount[data.status]++;
+    if (summary.statusCount[data.status] !== void 0) {
+      summary.statusCount[data.status]++;
+    }
     if (!summary.batchAgeData[data.batch])
       summary.batchAgeData[data.batch] = { t: 0, c: 0 };
     summary.batchAgeData[data.batch].t += age;
     summary.batchAgeData[data.batch].c += 1;
     const urutan = globalDocsData.length - index2;
     const arbCode = `ARB-${String(urutan).padStart(3, "0")}${data.randomSuffix || "XX"}`;
-    if ((arbCode.toLowerCase().includes(term) || data.batch.toLowerCase().includes(term)) && (filter === "all" || filter === "active" && data.status === "active" || filter === "dead" && data.status !== "active")) {
+    const matchesSearch = arbCode.toLowerCase().includes(term) || data.batch.toLowerCase().includes(term);
+    const matchesStatus = filter === "all" || filter === "produksi" && data.status === "produksi" || filter === "active" && data.status === "active" || filter === "dead" && isDead;
+    if (matchesSearch && matchesStatus) {
+      let statusBadgeClass = "status-dead";
+      let statusBadgeHTML = "";
+      if (data.status === "produksi") {
+        statusBadgeClass = "status-produksi";
+        statusBadgeHTML = `<i class="fa-solid fa-gears"></i> Produksi`;
+      } else if (data.status === "active") {
+        statusBadgeClass = "status-active";
+        statusBadgeHTML = `<i class="fa-solid fa-check-double"></i> ${age} Hari`;
+      } else {
+        statusBadgeClass = "status-dead";
+        statusBadgeHTML = `<i class="fa-solid fa-xmark"></i> Gagal (${age}h)`;
+      }
       const item = document.createElement("div");
       item.className = "bulb-item";
       item.innerHTML = `
@@ -31540,9 +31532,7 @@ const renderUI = () => {
                     <small>Prod: ${data.productionDate}</small>
                 </div>
                 <div class="bulb-item-actions">
-                    <span class="status-tag ${data.status !== "active" ? "status-dead" : "status-active"}">
-                        ${data.status !== "active" ? "Gagal (" + age + "h)" : age + " Hari"}
-                    </span>
+                    <span class="status-tag ${statusBadgeClass}">${statusBadgeHTML}</span>
                     <button class="btn-edit" data-id="${data.id}" data-status="${data.status}" data-code="${arbCode}"><i class="fa-solid fa-pen"></i></button>
                     <button class="btn-delete" data-id="${data.id}"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
@@ -31589,10 +31579,13 @@ document.getElementById("btn-confirm-delete").addEventListener("click", async ()
 document.getElementById("btn-confirm-edit").addEventListener("click", async () => {
   const s = document.getElementById("edit-status-select").value;
   const up = { status: s };
-  if (s !== "active" && docToEdit.old === "active")
+  const isNewDead = s.startsWith("dead");
+  const isOldDead = docToEdit.old.startsWith("dead");
+  if (isNewDead && !isOldDead) {
     up.failedDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-  else if (s === "active")
+  } else if (!isNewDead) {
     up.failedDate = null;
+  }
   await updateDoc(doc(db, "bulbs", docToEdit.id), up);
   closeModals();
   showToast("Status QC diperbarui");
@@ -31608,7 +31601,6 @@ const updateDBStatus = (isOnline) => {
   if (isOnline) {
     dbStatusEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Online (Firestore)';
     dbStatusEl.style.color = "var(--status-active)";
-    showToast("Koneksi stabil, sinkronisasi aktif.");
   } else {
     dbStatusEl.innerHTML = '<i class="fa-solid fa-wifi" style="text-decoration: line-through;"></i> Offline';
     dbStatusEl.style.color = "var(--status-dead)";
