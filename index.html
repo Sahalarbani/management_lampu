@@ -44,11 +44,11 @@
                 <div class="value text-black" id="qc-fail-percentage">0%</div>
             </div>
             <div class="card stat-card">
-                            <h3><i class="fa-solid fa-server"></i> Database Status</h3>
-                            <div class="value" id="db-status-el" style="color: var(--status-active); font-size: 1.8rem; margin-top: 15px;">
-                                <i class="fa-solid fa-circle-check"></i> Online
-                            </div>
-                        </div>
+                <h3><i class="fa-solid fa-server"></i> Database Status</h3>
+                <div class="value" id="db-status-el" style="color: var(--status-active); font-size: 1.8rem; margin-top: 15px;">
+                    <i class="fa-solid fa-circle-check"></i> Online
+                </div>
+            </div>
 
             <div class="card form-card">
                 <h3><i class="fa-solid fa-folder-plus"></i> Input Produksi Baru</h3>
@@ -56,7 +56,8 @@
                     <input type="text" id="bulb-batch" placeholder="Kode Batch (Misal: B1-2026)" required>
                     <input type="date" id="prod-date" required>
                     <select id="bulb-status" required>
-                        <option value="active">Normal / Hidup</option>
+                        <option value="produksi">Tahap Produksi</option>
+                        <option value="active">Aktif / Normal</option>
                         <option value="dead_chip">Gagal: Chip LED</option>
                         <option value="dead_driver">Gagal: Driver</option>
                         <option value="dead_solder">Gagal: Solder</option>
@@ -70,7 +71,7 @@
                 <canvas id="progressive-line-chart"></canvas>
             </div>
             <div class="card chart-card-small">
-                <h3><i class="fa-solid fa-chart-pie"></i> Distribusi Kegagalan</h3>
+                <h3><i class="fa-solid fa-chart-pie"></i> Distribusi Status Produksi</h3>
                 <canvas id="failure-doughnut-chart"></canvas>
             </div>
             <div class="card chart-card-small">
@@ -91,6 +92,7 @@
                     </div>
                     <select id="filter-status">
                         <option value="all">Semua Status</option>
+                        <option value="produksi">Tahap Produksi</option>
                         <option value="active">Aktif Normal</option>
                         <option value="dead">Semua Gagal</option>
                     </select>
@@ -110,7 +112,8 @@
             <p>Ubah status untuk kode <strong id="edit-arb-code"></strong>. Umur lampu akan terkunci jika diubah menjadi Gagal.</p>
             <form id="edit-form" style="margin-bottom: 20px;">
                 <select id="edit-status-select" required>
-                    <option value="active">Normal / Hidup</option>
+                    <option value="produksi">Tahap Produksi</option>
+                    <option value="active">Aktif / Normal</option>
                     <option value="dead_chip">Gagal: Chip LED</option>
                     <option value="dead_driver">Gagal: Driver</option>
                     <option value="dead_solder">Gagal: Solder</option>
@@ -129,7 +132,7 @@
                 <i class="fa-solid fa-triangle-exclamation modal-icon-warning"></i>
                 <h3>Konfirmasi Hapus</h3>
             </div>
-            <p>Lu yakin mau hapus riwayat produksi ini? Data bakal terhapus permanen dari database.</p>
+            <p>Yakin ingin menghapus riwayat produksi ini? Data akan terhapus permanen dari database.</p>
             <div class="modal-actions">
                 <button id="btn-cancel-delete" class="btn-secondary">Batal</button>
                 <button id="btn-confirm-delete" class="btn-danger"><i class="fa-solid fa-trash-can"></i> Ya, Hapus</button>

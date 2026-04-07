@@ -1,10 +1,11 @@
 /*
-  Version: 1.5.0
-  Date: 2026-04-07
+  Version: 1.7.0
+  Date: 2026-04-08
   Changelog:
-  - Added styles for filter-bar, search-wrapper, and new action buttons.
-  - Included .btn-edit styling and specific modal button colors.
+  - Added CSS variable and class for 'status-produksi'.
 */
+
+/* Ganti isi :root di file lu dengan ini */
 :root {
     --bg-main: #f9fafb;
     --surface-card: #ffffff;
@@ -12,10 +13,13 @@
     --text-muted: #6b7280;
     --border-light: #e5e7eb;
     --accent-primary: #2563eb;
+    --status-produksi: #6366f1; /* Indigo color untuk tahap produksi */
     --status-active: #10b981;
     --status-dead: #ef4444;
 }
 
+/* Biarkan kode lainnya utuh, lalu tambahkan class ini di bawah class .status-dead yang sudah ada */
+.status-produksi { background-color: var(--status-produksi); }
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
 body { background-color: var(--bg-main); color: var(--text-main); padding: 20px; }
 .container { max-width: 1100px; margin: 0 auto; }
