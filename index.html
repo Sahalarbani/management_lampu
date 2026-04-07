@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED DOB Tracker | Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-bolt text-accent"></i> LED DOB Tracker</h1>
+            <p>Monitoring Produksi & QC Lampu</p>
+        </header>
+
+        <main class="bento-grid">
+            <div class="card stat-card">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Rata-rata Umur</h3>
+                <div class="value text-black" id="avg-age-value">0 Hari</div>
+            </div>
+            <div class="card stat-card">
+                <h3><i class="fa-solid fa-boxes-stacked"></i> Total Produksi</h3>
+                <div class="value text-black" id="total-count">0</div>
+            </div>
+            <div class="card stat-card">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> QC Fail %</h3>
+                <div class="value text-black" id="qc-fail-percentage">0%</div>
+            </div>
+            <div class="card stat-card">
+                <h3><i class="fa-solid fa-server"></i> Database Status</h3>
+                <div class="value" style="color: var(--status-active); font-size: 1.8rem; margin-top: 15px;">
+                    <i class="fa-solid fa-circle-check"></i> Online
+                </div>
+            </div>
+
+            <div class="card form-card">
+                <h3><i class="fa-solid fa-folder-plus"></i> Input Produksi Baru</h3>
+                <form id="bulb-form">
+                    <input type="text" id="bulb-batch" placeholder="Kode Batch (Misal: B1-2026)" required>
+                    <input type="date" id="prod-date" required>
+                    <select id="bulb-status" required>
+                        <option value="active">Normal / Hidup</option>
+                        <option value="dead_chip">Gagal: Chip LED</option>
+                        <option value="dead_driver">Gagal: Driver</option>
+                        <option value="dead_solder">Gagal: Solder</option>
+                    </select>
+                    <button type="submit" id="btn-save"><i class="fa-solid fa-floppy-disk"></i> Simpan Data</button>
+                </form>
+            </div>
+
+            <div class="card chart-card-large">
+                <h3><i class="fa-solid fa-chart-line"></i> Progressive Line: Produksi vs Target</h3>
+                <canvas id="progressive-line-chart"></canvas>
+            </div>
+            <div class="card chart-card-small">
+                <h3><i class="fa-solid fa-chart-pie"></i> Distribusi Kegagalan</h3>
+                <canvas id="failure-doughnut-chart"></canvas>
+            </div>
+            <div class="card chart-card-small">
+                <h3><i class="fa-solid fa-chart-column"></i> Rata-rata Umur (Batch)</h3>
+                <canvas id="avg-age-batch-chart"></canvas>
+            </div>
+
+            <div class="card list-card">
+                <div class="list-header-actions">
+                    <h3><i class="fa-solid fa-clipboard-list"></i> Riwayat Produksi</h3>
+                    <button id="btn-export-csv" class="btn-outline"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                </div>
+                
+                <div class="filter-bar">
+                    <div class="search-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-input" placeholder="Cari ARB Code atau Batch...">
+                    </div>
+                    <select id="filter-status">
+                        <option value="all">Semua Status</option>
+                        <option value="active">Aktif Normal</option>
+                        <option value="dead">Semua Gagal</option>
+                    </select>
+                </div>
+
+                <div id="bulb-list-container" class="scroll-area"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <i class="fa-solid fa-pen-to-square" style="color: var(--accent-primary); font-size: 1.5rem; background: #dbeafe; padding: 10px; border-radius: 50%;"></i>
+                <h3>Update Status QC</h3>
+            </div>
+            <p>Ubah status untuk kode <strong id="edit-arb-code"></strong>. Umur lampu akan terkunci jika diubah menjadi Gagal.</p>
+            <form id="edit-form" style="margin-bottom: 20px;">
+                <select id="edit-status-select" required>
+                    <option value="active">Normal / Hidup</option>
+                    <option value="dead_chip">Gagal: Chip LED</option>
+                    <option value="dead_driver">Gagal: Driver</option>
+                    <option value="dead_solder">Gagal: Solder</option>
+                </select>
+            </form>
+            <div class="modal-actions">
+                <button id="btn-cancel-edit" class="btn-secondary">Batal</button>
+                <button id="btn-confirm-edit" class="btn-primary"><i class="fa-solid fa-check"></i> Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-delete-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <i class="fa-solid fa-triangle-exclamation modal-icon-warning"></i>
+                <h3>Konfirmasi Hapus</h3>
+            </div>
+            <p>Lu yakin mau hapus riwayat produksi ini? Data bakal terhapus permanen dari database.</p>
+            <div class="modal-actions">
+                <button id="btn-cancel-delete" class="btn-secondary">Batal</button>
+                <button id="btn-confirm-delete" class="btn-danger"><i class="fa-solid fa-trash-can"></i> Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>

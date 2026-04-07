@@ -1,13 +1,30 @@
 {
+  "_version": "1.0.4",
+  "_changelog": "Downgrade Vite ke versi 4.x. Vite 4 menggunakan Rollup 3 (pure JavaScript), menghindari crash native binary Rust pada arsitektur CPU ARMv8.0.",
   "name": "management_lampu",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sistem Manajemen QC Lampu DOB LED",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sahal Arbani",
   "license": "ISC",
-  "type": "commonjs"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sahalarbani/management_lampu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sahalarbani/management_lampu/issues"
+  },
+  "homepage": "https://github.com/Sahalarbani/management_lampu#readme",
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "firebase": "^12.11.0",
+    "vite": "^4.5.3"
+  }
 }
