@@ -31601,3 +31601,20 @@ onSnapshot(query(collection(db, "bulbs"), orderBy("createdAt", "desc")), (snap) 
   globalDocsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   renderUI();
 });
+const dbStatusEl = document.getElementById("db-status-el");
+const updateDBStatus = (isOnline) => {
+  if (!dbStatusEl)
+    return;
+  if (isOnline) {
+    dbStatusEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Online (Firestore)';
+    dbStatusEl.style.color = "var(--status-active)";
+    showToast("Koneksi stabil, sinkronisasi aktif.");
+  } else {
+    dbStatusEl.innerHTML = '<i class="fa-solid fa-wifi" style="text-decoration: line-through;"></i> Offline';
+    dbStatusEl.style.color = "var(--status-dead)";
+    showToast("Koneksi terputus! Data akan disinkronkan saat online.", true);
+  }
+};
+window.addEventListener("online", () => updateDBStatus(true));
+window.addEventListener("offline", () => updateDBStatus(false));
+updateDBStatus(navigator.onLine);
