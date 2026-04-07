@@ -193,3 +193,25 @@ onSnapshot(query(collection(db, "bulbs"), orderBy("createdAt", "desc")), snap =>
     globalDocsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderUI();
 });
+// --- LIVE DATABASE & NETWORK STATUS ---
+const dbStatusEl = document.getElementById('db-status-el');
+
+const updateDBStatus = (isOnline) => {
+    if (!dbStatusEl) return;
+    if (isOnline) {
+        dbStatusEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Online (Firestore)';
+        dbStatusEl.style.color = 'var(--status-active)';
+        showToast("Koneksi stabil, sinkronisasi aktif.");
+    } else {
+        dbStatusEl.innerHTML = '<i class="fa-solid fa-wifi" style="text-decoration: line-through;"></i> Offline';
+        dbStatusEl.style.color = 'var(--status-dead)';
+        showToast("Koneksi terputus! Data akan disinkronkan saat online.", true);
+    }
+};
+
+// Pasang kuping buat dengerin perubahan sinyal
+window.addEventListener('online', () => updateDBStatus(true));
+window.addEventListener('offline', () => updateDBStatus(false));
+
+// Cek status pas web pertama kali dibuka
+updateDBStatus(navigator.onLine);

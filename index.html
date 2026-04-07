@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#111827">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://Sahalarbani.github.io/management_lampu/">
+    <meta property="og:title" content="LED DOB Tracker | Management">
+    <meta property="og:description" content="Sistem Manajemen Produksi & Quality Control (QC) Lampu DOB LED.">
+    <meta property="og:image" content="https://Sahalarbani.github.io/management_lampu/icon-512.png">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="LED DOB Tracker | Management">
+    <meta name="twitter:description" content="Sistem Manajemen Produksi & Quality Control (QC) Lampu DOB LED.">
+    <meta name="twitter:image" content="https://Sahalarbani.github.io/management_lampu/icon-512.png">
+
     <title>LED DOB Tracker | Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="src/style.css">
@@ -28,11 +44,11 @@
                 <div class="value text-black" id="qc-fail-percentage">0%</div>
             </div>
             <div class="card stat-card">
-                <h3><i class="fa-solid fa-server"></i> Database Status</h3>
-                <div class="value" style="color: var(--status-active); font-size: 1.8rem; margin-top: 15px;">
-                    <i class="fa-solid fa-circle-check"></i> Online
-                </div>
-            </div>
+                            <h3><i class="fa-solid fa-server"></i> Database Status</h3>
+                            <div class="value" id="db-status-el" style="color: var(--status-active); font-size: 1.8rem; margin-top: 15px;">
+                                <i class="fa-solid fa-circle-check"></i> Online
+                            </div>
+                        </div>
 
             <div class="card form-card">
                 <h3><i class="fa-solid fa-folder-plus"></i> Input Produksi Baru</h3>
