@@ -38096,6 +38096,7 @@ window.showToast = (msg, isErr = false) => {
   if (!c) {
     c = document.createElement("div");
     c.className = "toast-container";
+    c.style.zIndex = "999999";
     document.body.appendChild(c);
   }
   const t = document.createElement("div");
@@ -38146,15 +38147,16 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   try {
     await signInWithEmailAndPassword(auth, em, pw);
     window.showToast("Login Sukses!");
-    window.logActivity(`[AUTH] Berhasil Login ke dalam sistem ERP.`);
+    window.logActivity("[AUTH] Berhasil Login ke dalam sistem ERP.");
   } catch (err) {
-    window.showToast("Akses Ditolak: Cek Kredensial", true);
+    alert("INFO ERROR: " + err.code + " | " + err.message);
+    window.showToast("Akses Ditolak: " + err.code, true);
   } finally {
     btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Buka Brankas';
   }
 });
 document.getElementById("btn-logout").addEventListener("click", () => {
-  window.logActivity(`[AUTH] Logout (Keluar) dari sistem ERP.`);
+  window.logActivity("[AUTH] Logout dari sistem ERP.");
   signOut(auth);
 });
 document.getElementById("btn-open-cctv").addEventListener("click", (e) => {
@@ -38257,10 +38259,11 @@ let masterVariants = { watt: [], ulir: [] };
 let masterPrices = {};
 let masterKontak = { klien: [], supplier: [] };
 onSnapshot(doc(db, "settings", "master_variants"), (docSnap) => {
-  if (docSnap.exists())
+  if (docSnap.exists()) {
     masterVariants = docSnap.data();
-  else
+  } else {
     setDoc(doc(db, "settings", "master_variants"), { watt: ["5W"], ulir: ["E27"] }, { merge: true });
+  }
   const updateVS = (id) => {
     const sel = document.getElementById(id);
     if (!sel)
@@ -38277,10 +38280,11 @@ onSnapshot(doc(db, "settings", "master_variants"), (docSnap) => {
   if (priceVarSel) {
     const pItem = document.getElementById("price-item").value;
     priceVarSel.innerHTML = '<option value="">Varian...</option>';
-    if (pItem === "pcb" || pItem === "lampu" || pItem === "cover")
+    if (pItem === "pcb" || pItem === "lampu" || pItem === "cover") {
       masterVariants.watt.forEach((w) => priceVarSel.innerHTML += `<option value="${w}">${w}</option>`);
-    else if (pItem === "ulir")
+    } else if (pItem === "ulir") {
       masterVariants.ulir.forEach((u) => priceVarSel.innerHTML += `<option value="${u}">${u}</option>`);
+    }
     window.refreshSelectUI("price-variant");
   }
   const c = document.getElementById("variant-tags-container");
@@ -38295,10 +38299,11 @@ if (document.getElementById("price-item")) {
     const pItem = e.target.value;
     const priceVarSel = document.getElementById("price-variant");
     priceVarSel.innerHTML = '<option value="">Varian...</option>';
-    if (pItem === "pcb" || pItem === "lampu" || pItem === "cover")
+    if (pItem === "pcb" || pItem === "lampu" || pItem === "cover") {
       masterVariants.watt.forEach((w) => priceVarSel.innerHTML += `<option value="${w}">${w}</option>`);
-    else if (pItem === "ulir")
+    } else if (pItem === "ulir") {
       masterVariants.ulir.forEach((u) => priceVarSel.innerHTML += `<option value="${u}">${u}</option>`);
+    }
     window.refreshSelectUI("price-variant");
   });
 }
@@ -38314,7 +38319,7 @@ document.getElementById("variant-form").addEventListener("submit", async (e) => 
       await setDoc(doc(db, "settings", "master_variants"), { [t]: arrayUnion(v2) }, { merge: true });
       window.logActivity(`[MASTER] Menambahkan Varian Baru: ${v2} (${t})`);
       document.getElementById("new-variant-val").value = "";
-      window.showToast(`Varian ditambah!`);
+      window.showToast("Varian ditambah!");
     } catch (error) {
       window.showToast("Gagal", true);
     } finally {
@@ -38365,7 +38370,7 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
       await setDoc(doc(db, "settings", "master_kontak"), { [tipe]: arrayUnion(nama) }, { merge: true });
       window.logActivity(`[MASTER] Mendaftarkan Kontak Baru: ${nama} sebagai ${tipe.toUpperCase()}`);
       document.getElementById("new-contact-name").value = "";
-      window.showToast(`Kontak ditambahkan!`);
+      window.showToast("Kontak ditambahkan!");
     } catch (err) {
       window.showToast("Gagal", true);
     } finally {
@@ -38393,7 +38398,14 @@ if (document.getElementById("bulb-form")) {
     const watt = document.getElementById("bulb-watt").value;
     const status = document.getElementById("bulb-status").value;
     try {
-      await addDoc(collection(db, "bulbs"), { batch, watt, productionDate: document.getElementById("prod-date").value, status, randomSuffix: generateRandomSuffix(), createdAt: /* @__PURE__ */ new Date() });
+      await addDoc(collection(db, "bulbs"), {
+        batch,
+        watt,
+        productionDate: document.getElementById("prod-date").value,
+        status,
+        randomSuffix: generateRandomSuffix(),
+        createdAt: /* @__PURE__ */ new Date()
+      });
       window.logActivity(`[QC - INPUT] Menginput Produksi Baru | Batch: ${batch} | Varian: ${watt} | Status Awal: ${status}`);
       e.target.reset();
       window.refreshSelectUI("bulb-watt");
@@ -38451,7 +38463,8 @@ const renderQCUI = () => {
     summary.batchAgeData[data.batch].c += 1;
     const arbCode = data.computedArbCode;
     if ((arbCode.toLowerCase().includes(term) || data.batch.toLowerCase().includes(term)) && (filter === "all" || filter === "produksi" && data.status === "produksi" || filter === "active" && data.status === "active" || filter === "dead" && isDead) && listC) {
-      let badgeClass = "status-dead", badgeHTML = `<i class="fa-solid fa-xmark"></i> Gagal (${age}h)`;
+      let badgeClass = "status-dead";
+      let badgeHTML = `<i class="fa-solid fa-xmark"></i> Gagal (${age}h)`;
       if (data.status === "produksi") {
         badgeClass = "status-produksi";
         badgeHTML = `<i class="fa-solid fa-gears"></i> Produksi`;
@@ -38511,7 +38524,7 @@ const calculateAutoPrice = () => {
       totalInfo.innerText = `@ Rp ${unitPrice}`;
   } else {
     if (totalInfo)
-      totalInfo.innerText = `Harga Dasar Belum Diset`;
+      totalInfo.innerText = "Harga Dasar Belum Diset";
   }
 };
 const renderBulbChecklist = () => {
@@ -38526,9 +38539,9 @@ const renderBulbChecklist = () => {
     document.getElementById("stok-qty").required = false;
     selectorDiv.style.display = "flex";
     const availableBulbs = globalQCData.filter((b2) => b2.status === "produksi" && b2.watt === variant);
-    if (availableBulbs.length === 0)
+    if (availableBulbs.length === 0) {
       listDiv.innerHTML = '<p style="font-size:0.8rem; color:var(--status-dead); padding:10px;">Stok Siap Jual Kosong.</p>';
-    else {
+    } else {
       listDiv.innerHTML = availableBulbs.map((b2) => `<label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer; background:var(--surface-card); padding:8px; border-radius:6px; border:1px solid var(--border-light);"><input type="checkbox" class="bulb-sale-cb" value="${b2.id}" data-arb="${b2.computedArbCode}"><span style="font-weight:bold; color:var(--accent-primary);">${b2.computedArbCode}</span></label>`).join("");
       document.querySelectorAll(".bulb-sale-cb").forEach((cb) => {
         cb.addEventListener("change", () => {
@@ -38613,7 +38626,7 @@ if (document.getElementById("stok-form")) {
       const checkedBoxes = document.querySelectorAll(".bulb-sale-cb:checked");
       qty = checkedBoxes.length;
       if (qty === 0)
-        return window.showToast("Pilih KTP ARB!", true);
+        return window.showToast("Pilih Kode ARB!", true);
       checkedBoxes.forEach((cb) => {
         bulbsToAutoUpdate.push(cb.value);
         arbCodesStr.push(cb.dataset.arb);
@@ -38721,7 +38734,7 @@ if (document.getElementById("btn-confirm-edit"))
       up.failedDate = null;
     }
     await updateDoc(doc(db, "bulbs", docToEdit.id), up);
-    window.logActivity(`[QC - EDIT] Mengubah data ${arbCodeTemp}. Status: ${oldStatusTemp} -> ${s}. Watt: ${oldWattTemp} -> ${w}`);
+    window.logActivity(`[QC - EDIT] Mengubah data ${arbCodeTemp}. Status: ${oldStatusTemp} menjadi ${s}. Watt: ${oldWattTemp} menjadi ${w}`);
     closeModals();
     window.showToast("QC diperbarui");
   });
@@ -38770,7 +38783,7 @@ if (document.getElementById("btn-export-csv"))
     });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-    a.download = `ARB_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.csv`;
+    a.download = `Laporan_QC_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.csv`;
     a.click();
     window.logActivity("[SISTEM] Mengunduh Laporan Data QC ke format CSV");
   });
