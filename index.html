@@ -4,66 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#111827">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://sahalarbani.github.io/management_lampu/">
-    <meta property="og:title" content="LED DOB ERP | Management">
-    <meta property="og:description" content="Sistem Terpadu Manajemen Produksi, QC, Inventaris, & Keuangan.">
-    <meta property="og:image" content="https://sahalarbani.github.io/management_lampu/icon-512.png"> 
+    <meta name="theme-color" content="#0b0e10">
     <title>LED DOB ERP | SECURED</title>
+
+    <meta name="description" content="Sistem ERP Terintegrasi untuk QC, Inventory, dan Finance LED DOB.">
+    <meta property="og:title" content="LED DOB ERP | SECURED">
+    <meta property="og:description" content="Sistem ERP Terintegrasi untuk QC, Inventory, dan Finance LED DOB.">
+    <meta property="og:image" content="icon-512x512.png">
+    <meta property="og:url" content="https://leddoberp.app/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-  <script type="module" crossorigin src="/management_lampu/assets/index-3f4d541b.js"></script>
-  <link rel="stylesheet" href="/management_lampu/assets/index-76ba5109.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+  <script type="module" crossorigin src="/management_lampu/assets/index-10c56824.js"></script>
+  <link rel="stylesheet" href="/management_lampu/assets/index-ff681512.css">
 </head>
 <body>
-    <div id="login-screen" class="modal-overlay active" style="z-index: 9999; background: var(--bg-main);">
-        <div class="card form-card" style="max-width: 400px; width: 90%; margin: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div id="splash-screen">
+        <i class="fa-solid fa-bolt pulse-logo"></i>
+        <h2 style="color: var(--text-main); font-weight: 800; letter-spacing: 2px;">LED DOB ERP</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Memeriksa Sesi Keamanan...</p>
+    </div>
+
+    <div id="login-screen" class="modal-overlay hidden" style="z-index: 9999; background: var(--bg-main);">
+        <div class="card form-card" style="max-width: 400px; width: 90%; margin: auto;">
             <div style="text-align: center; margin-bottom: 20px;">
                 <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 10px;"></i>
                 <h2>Sistem ERP Terkunci</h2>
                 <p style="font-size: 0.85rem; color: var(--text-muted);">Masukkan identitas untuk mengakses database</p>
             </div>
-            <form id="login-form" style="display: flex; flex-direction: column; gap: 15px;">
+            <form id="login-form">
                 <input type="email" id="login-email" placeholder="Email Karyawan / Admin" required>
-                <input type="password" id="login-password" placeholder="Password" required>
+                <div style="position: relative; width: 100%;">
+                    <input type="password" id="login-password" placeholder="Password" required style="padding-right: 40px;">
+                    <i class="fa-solid fa-eye" id="toggle-login-pass" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"></i>
+                </div>
                 <button type="submit" class="btn-primary" style="padding: 15px; font-size: 1.1rem;"><i class="fa-solid fa-right-to-bracket"></i> Buka Brankas</button>
             </form>
         </div>
     </div>
 
-    <div id="user-info" style="display:none; position: absolute; top: 15px; right: 20px; gap: 10px; align-items: center; z-index: 100;">
-        <span id="user-email" style="font-size: 0.8rem; font-weight: bold; background: var(--surface-card); padding: 5px 10px; border-radius: 20px; border: 1px solid var(--border-light);"></span>
-        <button id="btn-logout" class="btn-outline" style="padding: 5px 10px; height: auto; border-color: var(--status-dead); color: var(--status-dead);"><i class="fa-solid fa-power-off"></i></button>
-    </div>
-
     <div class="container" id="main-app-container" style="display: none;">
         <header>
             <h1><i class="fa-solid fa-bolt text-accent"></i> LED DOB ERP</h1>
-            <p>Integrated QC, Inventory & Finance</p>
+            <p style="color: var(--text-muted);">Integrated QC, Inventory & Finance</p>
         </header>
 
         <nav class="app-nav">
-            <a href="#/qc" class="nav-item active" id="nav-qc"><i class="fa-solid fa-clipboard-check"></i> QC Tracker</a>
-            <a href="#/stok" class="nav-item" id="nav-stok"><i class="fa-solid fa-boxes-stacked"></i> Stok Gudang</a>
-            <a href="#/keuangan" class="nav-item" id="nav-keuangan"><i class="fa-solid fa-wallet"></i> Keuangan</a>
-            <a href="#" class="nav-item" id="btn-open-cctv" style="color: var(--accent-primary);"><i class="fa-solid fa-video"></i> CCTV Log</a>
+            <a href="#/qc" class="nav-item active" id="nav-qc"><i class="fa-solid fa-clipboard-check"></i> <span>QC Tracker</span></a>
+            <a href="#/stok" class="nav-item" id="nav-stok"><i class="fa-solid fa-boxes-stacked"></i> <span>Stok Gudang</span></a>
+            <a href="#/keuangan" class="nav-item admin-only" id="nav-keuangan" style="display: none;"><i class="fa-solid fa-wallet"></i> <span>Keuangan</span></a>
+            <a href="#/admin" class="nav-item admin-only" id="nav-admin" style="display: none;"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Admin Panel</span></a>
+            <a href="#/cctv" class="nav-item admin-only" id="nav-cctv" style="display: none;"><i class="fa-solid fa-video"></i> <span>CCTV Log</span></a>
+            <a href="#/profil" class="nav-item" id="nav-profil"><i class="fa-solid fa-user-gear"></i> <span>Profil</span></a>
         </nav>
+
+        <section id="page-profil" class="page-view hidden">
+            <main class="bento-grid">
+                <div class="card stat-card" style="grid-column: 1 / -1; align-items: center; text-align: center; padding: 40px 20px;">
+                    <i class="fa-solid fa-circle-user" style="font-size: 5rem; color: var(--accent-primary); margin-bottom: 15px;"></i>
+                    <h2 id="profil-nama-display" style="font-size: 1.8rem; margin-bottom: 5px;">-</h2>
+                    <p id="profil-email-display" style="color: var(--text-muted); margin-bottom: 10px;">-</p>
+                    <span id="profil-role-badge" class="status-tag" style="background: var(--status-active);">Operator</span>
+                    <div id="profil-phone-display" style="margin-top: 15px; font-weight: bold; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> Belum Diatur</div>
+                    <button id="btn-profil-logout" class="btn-outline" style="margin-top: 30px; width: 100%; max-width: 250px; border-color: var(--status-dead); color: var(--status-dead);"><i class="fa-solid fa-right-from-bracket"></i> Keluar Akun</button>
+                </div>
+                <div id="profil-form-wrapper" class="card form-card" style="grid-column: 1 / -1; display: none; border: 1px dashed var(--status-warning);">
+                    <h3 style="color: var(--status-warning);"><i class="fa-solid fa-triangle-exclamation"></i> Lengkapi Profil Karyawan</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Perhatian: Data ini <strong>hanya bisa diisi satu kali</strong>.</p>
+                    <form id="profil-form">
+                        <input type="text" id="profil-input-nama" placeholder="Nama Lengkap Karyawan (Wajib)" required>
+                        <input type="tel" id="profil-input-phone" placeholder="Nomor WhatsApp (Opsional)">
+                        <button type="submit" class="btn-primary" style="background: var(--status-warning); color: #000;"><i class="fa-solid fa-user-check"></i> Permanenkan Profil</button>
+                    </form>
+                </div>
+            </main>
+        </section>
 
         <section id="page-qc" class="page-view active">
             <main class="bento-grid">
-                <div class="card stat-card"><h3><i class="fa-solid fa-clock-rotate-left"></i> Rata-rata Umur</h3><div class="value text-black" id="avg-age-value">0 Hari</div></div>
-                <div class="card stat-card"><h3><i class="fa-solid fa-check-double"></i> Total Lampu Aktif</h3><div class="value text-black" id="total-active" style="color: var(--status-active);">0</div></div>
-                <div class="card stat-card"><h3><i class="fa-solid fa-triangle-exclamation"></i> QC Fail %</h3><div class="value text-black" id="qc-fail-percentage">0%</div></div>
-                <div class="card stat-card"><h3><i class="fa-solid fa-server"></i> Database Status</h3><div class="value" id="db-status-el" style="color: var(--status-active); font-size: 1.5rem; margin-top: 15px;"><i class="fa-solid fa-circle-check"></i> Online</div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-clock-rotate-left"></i> Rata-rata Umur</h3><div class="value text-main" id="avg-age-value">0 Hari</div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-check-double"></i> Total Lampu Aktif</h3><div class="value" id="total-active" style="color: var(--status-active);">0</div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-triangle-exclamation"></i> QC Fail %</h3><div class="value text-main" id="qc-fail-percentage">0%</div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-server"></i> Database Status</h3><div class="value" id="db-status-el" style="color: var(--status-active); font-size: 1.5rem;"><i class="fa-solid fa-circle-check"></i> Online</div></div>
 
                 <div class="card form-card">
                     <h3><i class="fa-solid fa-folder-plus"></i> Input Produksi Baru</h3>
                     <form id="bulb-form">
                         <input type="text" id="bulb-batch" placeholder="Kode Batch (Misal: B1-2026)" required>
-                        <div style="display: flex; gap: 10px; align-items: stretch;"><select id="bulb-watt" required style="flex: 1;"><option value="">Pilih Watt...</option></select><input type="date" id="prod-date" required style="flex: 1;"></div>
-                        <select id="bulb-status" required><option value="produksi">Tahap Produksi</option><option value="active">Aktif / Normal</option><option value="dead_chip">Gagal: Chip LED</option><option value="dead_driver">Gagal: Driver</option><option value="dead_solder">Gagal: Solder</option></select>
+                        <div style="display: flex; gap: 10px;"><select id="bulb-watt" required style="flex: 1;"><option value="">Pilih Watt...</option></select><input type="date" id="prod-date" required style="flex: 1;"></div>
+                        <select id="bulb-status" required><option value="produksi">Tahap Produksi</option><option value="active">Aktif / Normal</option><option value="dead_chip">Gagal: Chip</option><option value="dead_driver">Gagal: Driver</option><option value="dead_solder">Gagal: Solder</option></select>
                         <button type="submit" id="btn-save"><i class="fa-solid fa-floppy-disk"></i> Simpan Data QC</button>
                     </form>
                 </div>
@@ -73,89 +109,143 @@
                 <div class="card chart-card-small"><h3><i class="fa-solid fa-chart-column"></i> Rata-rata Umur</h3><div style="position: relative; height: 250px; width: 100%;"><canvas id="avg-age-batch-chart"></canvas></div></div>
 
                 <div class="card list-card" style="grid-column: 1 / -1;">
-                    <div class="list-header-actions"><h3><i class="fa-solid fa-clipboard-list"></i> Riwayat QC</h3><button id="btn-export-csv" class="btn-outline"><i class="fa-solid fa-file-csv"></i> Export CSV</button></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3><i class="fa-solid fa-clipboard-list"></i> Riwayat QC</h3>
+                        <button id="btn-export-csv" class="btn-outline admin-only" style="display: none;"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                    </div>
                     <div class="filter-bar"><div class="search-wrapper"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-input" placeholder="Cari ARB Code..."></div><select id="filter-status"><option value="all">Semua Status</option><option value="produksi">Produksi</option><option value="active">Aktif</option><option value="dead">Gagal</option></select></div>
-                    <div id="bulb-list-container" class="scroll-area"></div>
+                    <div id="bulb-list-container" class="scroll-area"><div class="skeleton skel-card"></div><div class="skeleton skel-card"></div><div class="skeleton skel-card"></div></div>
                 </div>
             </main>
         </section>
 
         <section id="page-stok" class="page-view hidden">
             <main class="bento-grid">
-                <div class="card stat-card" style="border-top: 4px solid var(--status-active);"><h3><i class="fa-solid fa-lightbulb"></i> Stok Siap Jual</h3><div class="value text-black" id="stok-lampu-jadi">0 Pcs</div><small>Produksi QC - Terjual</small></div>
-                <div class="card stat-card" style="border-top: 4px solid var(--status-dead);"><h3><i class="fa-solid fa-dumpster-fire"></i> Lampu Gagal</h3><div class="value text-black" id="stok-lampu-gagal">0 Pcs</div><div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 8px; font-weight: bold;"><span style="color: #ef4444;">Chip: <span id="fail-chip">0</span></span><span style="color: #f59e0b;">Drv: <span id="fail-driver">0</span></span><span style="color: #8b5cf6;">Sld: <span id="fail-solder">0</span></span></div></div>
-                <div class="card stat-card"><h3><i class="fa-solid fa-droplet"></i> Stok Lem Lampu</h3><div class="value text-black" id="stok-lem">0 Pcs</div></div>
-
-                <div class="card form-card">
-                    <h3><i class="fa-solid fa-gears"></i> Master Varian</h3>
-                    <form id="variant-form" style="display: flex; gap: 5px; margin-bottom: 10px;"><input type="text" id="new-variant-val" placeholder="18W / E27" required style="flex: 2;"><select id="new-variant-type" required style="flex: 1;"><option value="watt">Watt</option><option value="ulir">Ulir</option></select><button type="submit" class="btn-outline" style="flex: 1;"><i class="fa-solid fa-plus"></i></button></form>
-                    <div id="variant-tags-container" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
-                </div>
-                <div class="card form-card">
-                    <h3><i class="fa-solid fa-tags"></i> Master Harga (Per Pcs)</h3>
-                    <form id="price-form" style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; gap: 10px;"><select id="price-item" required style="flex: 1;"><option value="lampu">Lampu Jadi</option><option value="pcb">PCB LED</option><option value="cover">Cover Lampu</option><option value="ulir">Ulir Soket</option></select><select id="price-variant" required style="flex: 1;"><option value="">Varian...</option></select></div>
-                        <div style="display: flex; gap: 10px;"><input type="number" id="price-val" placeholder="Harga (Rp)" required min="0" style="flex: 2;"><button type="submit" class="btn-outline" style="flex: 1;"><i class="fa-solid fa-save"></i> Set</button></div>
-                    </form>
-                </div>
-                <div class="card form-card">
-                    <h3><i class="fa-solid fa-address-book"></i> Master Kontak Baru</h3>
-                    <form id="contact-form" style="display: flex; flex-direction: column; gap: 10px;"><input type="text" id="new-contact-name" placeholder="Nama Toko / Supplier" required><div style="display: flex; gap: 10px;"><select id="new-contact-type" required style="flex: 2;"><option value="klien">Pelanggan (Klien)</option><option value="supplier">Pemasok (Supplier)</option></select><button type="submit" class="btn-primary" style="flex: 1;"><i class="fa-solid fa-plus"></i></button></div></form>
-                </div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-lightbulb"></i> Stok Siap Jual</h3><div class="value text-main" id="stok-lampu-jadi">0 Pcs</div><small style="color: var(--text-muted);">Produksi QC - Terjual</small></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-dumpster-fire"></i> Lampu Gagal</h3><div class="value text-main" id="stok-lampu-gagal">0 Pcs</div><div style="display: flex; gap: 15px; font-size: 0.8rem; font-weight: bold;"><span style="color: var(--status-dead);">Chip: <span id="fail-chip">0</span></span><span style="color: var(--status-warning);">Drv: <span id="fail-driver">0</span></span><span style="color: var(--text-muted);">Sld: <span id="fail-solder">0</span></span></div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-droplet"></i> Stok Lem Lampu</h3><div class="value text-main" id="stok-lem">0 Pcs</div></div>
 
                 <div class="card form-card" style="grid-column: 1 / -1; max-width: 600px;">
                     <h3><i class="fa-solid fa-truck-ramp-box"></i> Transaksi Gudang & Penjualan</h3>
                     <form id="stok-form">
-                        <div style="display: flex; gap: 10px; align-items: stretch;"><select id="stok-type" required style="flex: 1;"><option value="in">Barang Masuk (+)</option><option value="out">Barang Keluar (-)</option></select><select id="stok-item" required style="flex: 1;"><option value="">Pilih Jenis Barang...</option><option value="lampu" style="font-weight: bold; color: var(--accent-primary);">💡 Lampu Jadi (Jual)</option><option value="pcb">PCB LED</option><option value="cover">Cover Lampu</option><option value="ulir">Ulir Soket</option><option value="lem">Lem Lampu</option></select></div>
+                        <div style="display: flex; gap: 10px;"><select id="stok-type" required style="flex: 1;"><option value="in">Barang Masuk (+)</option><option value="out">Barang Keluar (-)</option></select><select id="stok-item" required style="flex: 1;"><option value="">Pilih Jenis Barang...</option><option value="lampu">Lampu Jadi (Jual)</option><option value="pcb">PCB LED</option><option value="cover">Cover Lampu</option><option value="ulir">Ulir Soket</option><option value="lem">Lem Lampu</option></select></div>
                         <div id="stok-variant-wrapper" style="display: none;"><select id="stok-variant"><option value="">Pilih Varian...</option></select></div>
                         <div id="stok-qty-wrapper"><input type="number" id="stok-qty" placeholder="Jumlah Pcs/Roll" required min="1"></div>
-                        <div id="stok-bulb-selector" style="display: none; flex-direction: column; gap: 10px; background: var(--bg-main); padding: 15px; border-radius: 8px; border: 1px solid var(--border-light);">
-                            <p style="font-size: 0.85rem; font-weight: bold; color: var(--text-main); margin-bottom: 5px;"><i class="fa-solid fa-barcode"></i> Pilih KTP Lampu (ARB):</p>
-                            <div id="bulb-checkbox-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; max-height: 180px; overflow-y: auto; padding-right: 5px;"></div>
-                            <div style="font-size: 0.85rem; font-weight: bold; text-align: right; color: var(--accent-primary); border-top: 1px solid var(--border-light); padding-top: 10px;">Total Dipilih: <span id="selected-bulb-count" style="font-size: 1.2rem;">0</span> Pcs</div>
+                        <div id="stok-bulb-selector" style="display: none; flex-direction: column; gap: 10px; background: var(--surface-elevated); padding: 15px; border-radius: 8px; border: 1px solid var(--border-light);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; margin-bottom: 5px;"><p style="font-size: 0.85rem; font-weight: bold; margin:0;"><i class="fa-solid fa-barcode"></i> KTP Lampu (ARB):</p><button type="button" id="btn-open-scanner" class="btn-primary" style="padding: 5px 10px; height: auto; font-size: 0.8rem; width: auto;"><i class="fa-solid fa-camera"></i> Scan Label</button></div>
+                            <div id="bulb-checkbox-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; max-height: 180px; overflow-y: auto;"></div>
+                            <div style="font-size: 0.85rem; font-weight: bold; text-align: right; color: var(--accent-primary);">Total: <span id="selected-bulb-count" style="font-size: 1.2rem;">0</span> Pcs</div>
                         </div>
-                        <div id="financial-wrapper" style="display: none; background: #eff6ff; padding: 15px; border-radius: 8px; border: 1px dashed var(--accent-primary); flex-direction: column; gap: 10px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;"><p style="font-size: 0.8rem; font-weight: bold; color: var(--accent-primary);"><i class="fa-solid fa-link"></i> Terhubung ke Buku Besar</p><span id="unit-price-info" style="font-size: 0.75rem; color: var(--text-muted);"></span></div>
-                            <select id="stok-contact" required><option value="">Pilih Klien / Supplier...</option></select><input type="number" id="stok-price" placeholder="Total Harga Otomatis (Rp)" required min="0"><select id="stok-payment" required><option value="lunas">Lunas (Tunai/Transfer)</option><option value="tempo">Kredit (Masuk Piutang/Hutang)</option></select>
+                        <div id="financial-wrapper" class="admin-only" style="display: none; background: var(--surface-elevated); padding: 15px; border-radius: 8px; border: 1px dashed var(--accent-primary); flex-direction: column; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between;"><p style="font-size: 0.8rem; font-weight: bold; color: var(--accent-primary);"><i class="fa-solid fa-link"></i> Link Buku Besar</p><span id="unit-price-info" style="font-size: 0.75rem; color: var(--text-muted);"></span></div>
+                            <div style="display: flex; gap: 10px;"><select id="stok-contact" required style="flex: 1;"><option value="">Pilih Klien / Supplier...</option></select><button type="button" id="btn-quick-contact" class="btn-outline" style="flex: 0 0 50px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Tambah Kontak Cepat"><i class="fa-solid fa-user-plus"></i></button></div>
+                            <input type="number" id="stok-price" placeholder="Total Harga (Rp)" required min="0">
+                            <select id="stok-payment" required><option value="lunas">Lunas (Tunai/Transfer)</option><option value="tempo">Kredit (Tempo)</option></select>
                         </div>
                         <button type="submit" id="btn-save-stok"><i class="fa-solid fa-box"></i> Eksekusi Transaksi</button>
                     </form>
                 </div>
-
-                <div class="card list-card" style="grid-column: 1 / -1; display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-                    <div><h3><i class="fa-solid fa-boxes-stacked"></i> Rekap Sisa Komponen</h3><div id="rekap-stok-container" class="scroll-area" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 10px;"></div></div>
-                    <div><h3><i class="fa-solid fa-tags"></i> Daftar Harga Dasar</h3><div id="price-list-container" class="scroll-area" style="margin-top: 10px; font-size: 0.85rem;"></div></div>
+                <div class="card list-card" style="grid-column: 1 / -1;">
+                    <h3><i class="fa-solid fa-boxes-stacked"></i> Rekap Sisa Komponen</h3>
+                    <div id="rekap-stok-container" class="scroll-area" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 10px;"><div class="skeleton skel-card"></div><div class="skeleton skel-card"></div><div class="skeleton skel-card"></div></div>
                 </div>
             </main>
         </section>
 
         <section id="page-keuangan" class="page-view hidden">
             <main class="bento-grid">
-                <div class="card stat-card" style="border-top: 4px solid var(--status-active); background: #f0fdf4;"><h3><i class="fa-solid fa-vault"></i> Saldo Kas Aktual</h3><div class="value text-black" id="keuangan-kas">Rp 0</div></div>
-                <div class="card stat-card" style="border-top: 4px solid #3b82f6;"><h3><i class="fa-solid fa-hand-holding-dollar"></i> Total Piutang (Tagihan)</h3><div class="value text-black" id="keuangan-piutang">Rp 0</div></div>
-                <div class="card stat-card" style="border-top: 4px solid var(--status-dead); background: #fef2f2;"><h3><i class="fa-solid fa-file-invoice-dollar"></i> Total Hutang</h3><div class="value text-black" id="keuangan-hutang">Rp 0</div></div>
-                <div class="card list-card" style="grid-column: 1 / -1;"><h3><i class="fa-solid fa-book-open"></i> Buku Besar (General Ledger)</h3><div id="ledger-container" class="scroll-area" style="margin-top: 15px;"></div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-vault"></i> Saldo Kas Aktual</h3><div class="value text-main" id="keuangan-kas">Rp 0</div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-hand-holding-dollar"></i> Total Piutang</h3><div class="value text-main" id="keuangan-piutang">Rp 0</div></div>
+                <div class="card stat-card"><h3><i class="fa-solid fa-file-invoice-dollar"></i> Total Hutang</h3><div class="value text-main" id="keuangan-hutang">Rp 0</div></div>
+                <div class="card chart-card-large" style="grid-column: 1 / -1;">
+                    <h3><i class="fa-solid fa-money-bill-trend-up"></i> Grafik Cashflow & Profit</h3>
+                    <div style="position: relative; height: 350px; width: 100%; margin-top: 10px;"><canvas id="finance-chart"></canvas></div>
+                </div>
+                <div class="card list-card" style="grid-column: 1 / -1;"><h3><i class="fa-solid fa-book-open"></i> Buku Besar</h3><div id="ledger-container" class="scroll-area" style="margin-top: 15px;"><div class="skeleton skel-card"></div><div class="skeleton skel-card"></div></div></div>
                 <div class="card list-card" style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div><h3 style="color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: 5px;"><i class="fa-solid fa-arrow-down-short-wide"></i> Piutang Belum Lunas</h3><div id="active-piutang-container" style="margin-top: 10px;"></div></div>
-                    <div><h3 style="color: var(--status-dead); border-bottom: 2px solid var(--status-dead); padding-bottom: 5px;"><i class="fa-solid fa-arrow-up-wide-short"></i> Hutang Belum Lunas</h3><div id="active-hutang-container" style="margin-top: 10px;"></div></div>
+                    <div><h3 style="color: var(--status-active);"><i class="fa-solid fa-arrow-down"></i> Piutang Belum Lunas</h3><div id="active-piutang-container" style="margin-top: 10px;"></div></div>
+                    <div><h3 style="color: var(--status-dead);"><i class="fa-solid fa-arrow-up"></i> Hutang Belum Lunas</h3><div id="active-hutang-container" style="margin-top: 10px;"></div></div>
+                </div>
+            </main>
+        </section>
+
+        <section id="page-admin" class="page-view hidden">
+            <main class="bento-grid">
+                <div class="card list-card" style="grid-column: 1 / -1; border: 1px solid var(--accent-primary);">
+                    <h3 style="color: var(--accent-primary);"><i class="fa-solid fa-users-gear"></i> Manajemen Karyawan & Akses</h3>
+                    <form id="karyawan-reg-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light);">
+                        <p style="font-size: 0.85rem; color: var(--text-muted);"><i class="fa-solid fa-user-plus"></i> Daftarkan Akun Karyawan Baru:</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <input type="email" id="reg-email" placeholder="Email Login" required>
+                            <div style="position: relative; width: 100%;"><input type="password" id="reg-password" placeholder="Password (Min. 6 Karakter)" required style="padding-right: 40px; width: 100%;"><i class="fa-solid fa-eye" id="toggle-reg-pass" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"></i></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <input type="text" id="reg-nama" placeholder="Nama Karyawan" required>
+                            <select id="reg-role" required><option value="operator">Role: Operator</option><option value="admin">Role: Admin</option></select>
+                        </div>
+                        <button type="submit" class="btn-primary" style="margin-top: 5px;"><i class="fa-solid fa-floppy-disk"></i> Buat Akun Karyawan</button>
+                    </form>
+                    <div id="karyawan-list-container" class="scroll-area" style="max-height: 250px;"></div>
+                </div>
+                <div class="card form-card">
+                    <h3><i class="fa-solid fa-gears"></i> Master Varian</h3>
+                    <form id="variant-form" style="display: flex; gap: 5px; margin-bottom: 10px;"><input type="text" id="new-variant-val" placeholder="Misal: 18W" required style="flex: 2;"><select id="new-variant-type" required style="flex: 1;"><option value="watt">Watt</option><option value="ulir">Ulir</option></select><button type="submit" class="btn-outline" style="flex: 1;"><i class="fa-solid fa-plus"></i></button></form>
+                    <div id="variant-tags-container" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
+                </div>
+                <div class="card form-card">
+                    <h3><i class="fa-solid fa-tags"></i> Master Harga</h3>
+                    <form id="price-form">
+                        <div style="display: flex; gap: 10px;"><select id="price-item" required style="flex: 1;"><option value="lampu">Lampu Jadi</option><option value="pcb">PCB LED</option><option value="cover">Cover Lampu</option><option value="ulir">Ulir Soket</option></select><select id="price-variant" required style="flex: 1;"><option value="">Varian...</option></select></div>
+                        <div style="display: flex; gap: 10px;"><input type="number" id="price-val" placeholder="Harga (Rp)" required min="0" style="flex: 2;"><button type="submit" class="btn-outline" style="flex: 1;"><i class="fa-solid fa-save"></i></button></div>
+                    </form>
+                    <div id="price-list-container" class="scroll-area" style="margin-top: 15px;"></div>
+                </div>
+                <div class="card form-card">
+                    <h3><i class="fa-solid fa-address-book"></i> Master Kontak</h3>
+                    <form id="contact-form"><input type="text" id="new-contact-name" placeholder="Nama Toko / Supplier" required><div style="display: flex; gap: 10px;"><select id="new-contact-type" required style="flex: 2;"><option value="klien">Klien</option><option value="supplier">Supplier</option></select><button type="submit" class="btn-primary" style="flex: 1;"><i class="fa-solid fa-plus"></i></button></div></form>
+                </div>
+            </main>
+        </section>
+
+        <section id="page-cctv" class="page-view hidden">
+            <main class="bento-grid">
+                <div class="card list-card" style="grid-column: 1 / -1;">
+                    <h3><i class="fa-solid fa-video"></i> Log Sistem (50 Terakhir)</h3>
+                    <div id="cctv-list-page" class="scroll-area" style="margin-top: 15px; border: 1px solid var(--border-light); border-radius: 8px; background: var(--surface-elevated);"><div class="skeleton skel-card"></div><div class="skeleton skel-card"></div></div>
+                    <button id="btn-load-more-cctv" class="btn-outline" style="margin-top: 15px; width: 100%;"><i class="fa-solid fa-rotate-right"></i> Load More</button>
                 </div>
             </main>
         </section>
     </div>
 
-    <div id="cctv-modal" class="modal-overlay hidden">
-        <div class="modal-card" style="max-width: 600px;">
-            <h3><i class="fa-solid fa-video"></i> CCTV Log Aktivitas</h3>
-            <div id="cctv-list" class="scroll-area" style="max-height: 400px; margin-top: 15px; border: 1px solid var(--border-light); border-radius: 8px; background: var(--bg-main);"></div>
-            <div class="modal-actions"><button id="btn-close-cctv" class="btn-secondary">Tutup Log</button></div>
+    <div id="payment-modal" class="modal-overlay hidden"><div class="modal-card"><h3>Pelunasan Tagihan</h3><p id="payment-desc" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;"></p><form id="payment-form" style="margin-bottom: 20px;"><input type="number" id="payment-amount" placeholder="Nominal Pembayaran (Rp)" required min="1"></form><div class="modal-actions"><button id="btn-cancel-payment" class="btn-secondary">Batal</button><button id="btn-confirm-payment" class="btn-primary">Bayar</button></div></div></div>
+    <div id="edit-modal" class="modal-overlay hidden"><div class="modal-card"><h3>Update QC (<span id="edit-arb-code"></span>)</h3><form id="edit-form" style="margin-bottom: 20px;"><select id="edit-status-select" required><option value="produksi">Tahap Produksi</option><option value="active">Aktif / Normal</option><option value="dead_chip">Gagal: Chip</option><option value="dead_driver">Gagal: Driver</option><option value="dead_solder">Gagal: Solder</option></select><select id="edit-bulb-watt"><option value="">Pilih Watt...</option></select></form><div class="modal-actions"><button id="btn-cancel-edit" class="btn-secondary">Batal</button><button id="btn-confirm-edit" class="btn-primary">Simpan</button></div></div></div>
+    <div id="custom-delete-modal" class="modal-overlay hidden"><div class="modal-card"><h3>Konfirmasi Hapus</h3><div class="modal-actions"><button id="btn-cancel-delete" class="btn-secondary">Batal</button><button id="btn-confirm-delete" class="btn-danger">Hapus</button></div></div></div>
+    <div id="quick-contact-modal" class="modal-overlay hidden"><div class="modal-card"><h3><i class="fa-solid fa-user-plus"></i> Tambah Kontak Cepat</h3><form id="quick-contact-form" style="margin-bottom: 20px;"><input type="text" id="quick-contact-name" placeholder="Nama Klien / Supplier Baru" required></form><div class="modal-actions"><button type="button" id="btn-cancel-quick-contact" class="btn-secondary">Batal</button><button type="submit" form="quick-contact-form" class="btn-primary">Simpan</button></div></div></div>
+    <div id="edit-karyawan-modal" class="modal-overlay hidden"><div class="modal-card"><h3><i class="fa-solid fa-user-pen"></i> Edit Karyawan</h3><p id="edit-karyawan-email" style="font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 15px; font-weight: bold;"></p><form id="edit-karyawan-form" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;"><input type="text" id="edit-karyawan-nama" placeholder="Nama Karyawan" required><select id="edit-karyawan-role" required><option value="operator">Role: Operator</option><option value="admin">Role: Admin</option></select></form><div class="modal-actions"><button type="button" id="btn-cancel-edit-karyawan" class="btn-secondary">Batal</button><button type="submit" form="edit-karyawan-form" class="btn-primary">Simpan</button></div></div></div>
+    
+    <div id="qr-print-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="text-align: center;">
+            <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-print"></i> Cetak Label KTP Lampu</h3>
+            <p id="qr-title-code" style="color: var(--accent-primary); font-weight: bold; font-size: 1.2rem; margin-bottom: 15px;"></p>
+            <div style="background: white; padding: 15px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"><canvas id="qr-canvas"></canvas></div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Nyalakan Bluetooth Printer Thermal Anda.</p>
+            <div class="modal-actions" style="justify-content: center; margin-top: 25px;"><button type="button" id="btn-close-qr" class="btn-secondary">Tutup</button><button type="button" id="btn-print-thermal" class="btn-primary"><i class="fa-solid fa-bluetooth"></i> Cetak via Bluetooth</button></div>
         </div>
     </div>
+    <div id="qr-scan-modal" class="modal-overlay hidden"><div class="modal-card" style="max-width: 500px;"><h3><i class="fa-solid fa-camera-retro"></i> Scan Label Lampu</h3><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Arahkan kamera HP ke stiker QR Code.</p><div id="qr-reader" style="width: 100%; border: 2px dashed var(--accent-primary); border-radius: 8px; overflow: hidden; background: black;"></div><div class="modal-actions"><button type="button" id="btn-close-scanner" class="btn-secondary" style="width: 100%;">Batal / Tutup Kamera</button></div></div></div>
 
-    <div id="payment-modal" class="modal-overlay hidden"><div class="modal-card"><h3>Pelunasan Tagihan</h3><p id="payment-desc" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;"></p><form id="payment-form" style="margin-bottom: 20px;"><input type="number" id="payment-amount" placeholder="Nominal Pembayaran (Rp)" required min="1"></form><div class="modal-actions"><button id="btn-cancel-payment" class="btn-secondary">Batal</button><button id="btn-confirm-payment" class="btn-primary">Bayar</button></div></div></div>
-    <div id="edit-modal" class="modal-overlay hidden"><div class="modal-card"><h3>Update QC (<span id="edit-arb-code"></span>)</h3><form id="edit-form" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;"><select id="edit-status-select" required style="width: 100%;"><option value="produksi">Tahap Produksi</option><option value="active">Aktif / Normal</option><option value="dead_chip">Gagal: Chip LED</option><option value="dead_driver">Gagal: Driver</option><option value="dead_solder">Gagal: Solder</option></select><select id="edit-bulb-watt" style="width: 100%;"><option value="">Pilih Watt...</option></select></form><div class="modal-actions"><button id="btn-cancel-edit" class="btn-secondary">Batal</button><button id="btn-confirm-edit" class="btn-primary">Simpan</button></div></div></div>
-    <div id="custom-delete-modal" class="modal-overlay hidden"><div class="modal-card"><h3>Konfirmasi Hapus</h3><div class="modal-actions"><button id="btn-cancel-delete" class="btn-secondary">Batal</button><button id="btn-confirm-delete" class="btn-danger">Hapus</button></div></div></div>
-
+    <div id="print-area"></div>
     
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => {
+                    console.log('SW registration failed:', err);
+                });
+            });
+        }
+    </script>
     
 </body>
 </html>
