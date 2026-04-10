@@ -1,5 +1,11 @@
+/*
+  Version: 8.6.0 (Offline-First Edition)
+  Date: 2026-04-10
+  Changelog:
+  - FEATURE: Enabled IndexedDB Persistence for true offline capability.
+*/
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -14,3 +20,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+// NYALAKAN MESIN OFFLINE DATABASE
+enableIndexedDbPersistence(db).catch((err) => {
+    if (err.code == 'failed-precondition') {
+        console.warn('Multiple tabs open, offline mode restricted to one tab.');
+    } else if (err.code == 'unimplemented') {
+        console.warn('Browser does not support offline mode.');
+    }
+});
+// ... (kode atasnya biarin sama aja)
+
+// Pastikan baris export config ini ADA di paling bawah:
+export { firebaseConfig };
